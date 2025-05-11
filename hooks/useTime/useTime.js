@@ -1,56 +1,24 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
-export const useTime = (arg1, arg2) => {
-  let timestamp, timeZone;
-  if (typeof arg1 === "string") {
-    timeZone = arg1;
-    timestamp = arg2;
-  } else {
-    timestamp = arg1;
-    timeZone = arg2;
-  }
+export function useTime(timeZone) {
+  const options = { hour12: true, hour: "numeric", minute: "numeric" }; // Edit options according to your needs
 
-  // Edit options according to your needs
-  //====================================================================
-  const options = { hour12: true, hour: "numeric", minute: "numeric" };
-  //====================================================================
-
-  const d = timestamp ? new Date(timestamp * 1000) : new Date();
-  const dateRef = useRef(d);
   const [currentTime, setCurrentTime] = useState(
-    dateRef.current.toLocaleString("en-GB", options),
+    new Date().toLocaleTimeString("en-GB", { timeZone, ...options })
   );
 
   useEffect(() => {
-    console.log("first");
-    if (timestamp) return;
-
-    const interval = setInterval(() => {
-      console.log("second");
-      dateRef.current = new Date(dateRef.current.getTime() + 1000);
-
-      if (dateRef.current.getSeconds() === 0) {
-        const added1Min = dateRef.current.toLocaleString("en-GB", {
-          timeZone,
-          ...options,
-        });
-        setCurrentTime(added1Min);
+    const timer = setInterval(() => {
+      const now = new Date();
+      if (now.getSeconds() === 0) {
+        setCurrentTime(
+          now.toLocaleTimeString("en-GB", { timeZone, ...options })
+        );
       }
     }, 1000);
 
-    return () => clearInterval(interval);
-  }, [timeZone, timestamp]);
+    return () => clearInterval(timer);
+  }, [timeZone]);
 
-  useEffect(() => {
-    dateRef.current = timestamp ? new Date(timestamp * 1000) : new Date();
-    setCurrentTime(
-      dateRef.current.toLocaleString("en-GB", { timeZone, ...options }),
-    );
-  }, [timeZone, timestamp]);
-
-  return {
-    time: currentTime,
-    minute: dateRef.current.getMinutes(),
-    hour: dateRef.current.getHours(),
-  };
-};
+  return currentTime;
+}
