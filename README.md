@@ -13,6 +13,7 @@ Just copy the code and start using it in your React project.
 ## 🪝 Hooks
 
 - **useTime** &nbsp;&nbsp; [code](./hooks/useTime/useTime.js) | [doc](./hooks/useTime/README.md)
+- **useDebounce** &nbsp;&nbsp; [code](./hooks/useDebounce/useDebounce.js)
 - **useLocalStorage** &nbsp;&nbsp; [code](./hooks/useLocalStorage/useLocalStorage.js)
 
 ---
